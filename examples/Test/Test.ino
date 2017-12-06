@@ -1,8 +1,10 @@
-#include <L298N_MotorDriver.h>
+#include "L298N_MotorDriver.h"
 
 // motor instances 
-L298N *Drive;
-L298N *Turn;
+L298N_MotorDriver MD = L298N_MotorDriver();
+
+MotorDriver *DriveMotor = MD.getMotor(1);
+MotorDriver *TurnMotor = MD.getMotor(2);
 
 void setup()
 {
@@ -11,15 +13,15 @@ void setup()
 
 void loop() 
 {
-  Turn->setSpeed(255);
-  Turn->steer(LEFT);
-  Drive->setSpeed(150);
-  Drive->run(FORWARD);
+  DriveMotor->setSpeed(100);
+  DriveMotor->run(FORWARD);
+  TurnMotor->setSpeed(255);
+  TurnMotor->run(LEFT);
   delay(1000);
-  
-  Turn->setSpeed(255);
-  Turn->steer(RIGHT);
-  Drive->setSpeed(150);
-  Drive->run(BACKWARD);
+
+  DriveMotor->setSpeed(100);
+  DriveMotor->run(BACKWARD);
+  TurnMotor->setSpeed(255);
+  TurnMotor->run(RIGHT);
   delay(1000);
 }
