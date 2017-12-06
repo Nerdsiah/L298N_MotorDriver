@@ -2,8 +2,8 @@
 
 // MotorDriver.h
 
-#ifndef _L298N_MOTORDRIVER_h
-#define _L298N_MOTORDRIVER_h
+#ifndef _L298N_MotorDriver_h
+#define _L298N_MotorDriver_h
 
 #if defined(ARDUINO) && ARDUINO >= 100
 #include "Arduino.h"
