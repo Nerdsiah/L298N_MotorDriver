@@ -1,5 +1,9 @@
-#ifndef _L298N_MotorDriver_h_
-#define _L298N_MotorDriver_h_
+#pragma once
+
+// MotorDriver.h
+
+#ifndef _L298N_MOTORDRIVER_h
+#define _L298N_MOTORDRIVER_h
 
 #if defined(ARDUINO) && ARDUINO >= 100
 #include "Arduino.h"
@@ -14,21 +18,34 @@
 #define BACKWARD 2
 #define BRAKE 3
 #define RELEASE 4
-
 #define LEFT 5
 #define RIGHT 6
 #define STRAIGHT 7
 
-class L298N
+class L298N_MotorDriver;
+
+class MotorDriver
 {
 public:
-  void run(uint8_t);
-  void steer(uint8_t);
-  void setSpeed(uint8_t);
-  uint8_t getSpeed();
+  MotorDriver();
+  friend class L298N_MotorDriver;
+  void run(uint8_t cmd);
+  void setSpeed(uint8_t pwmVal);
   
 private:
-  uint8_t _speed, _EnableDrive, _EnableTurn;
+  uint8_t _pwmVal, PWMpin;
+  uint8_t motornum;
+};
+
+class L298N_MotorDriver
+{
+public:
+  L298N_MotorDriver();
+  friend class MotorDriver;
+  MotorDriver *getMotor(uint8_t n);
+
+private:
+  MotorDriver dcmotors[2];
 };
 
 #endif
