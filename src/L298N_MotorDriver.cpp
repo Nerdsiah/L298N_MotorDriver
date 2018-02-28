@@ -38,9 +38,6 @@ MotorDriver::MotorDriver()
 
 void MotorDriver::run(uint8_t cmd)
 {
-//  uint8_t EnableDrivePin = 5;
-//  _Enablepin = EnableDrivePin;
-  
   switch (cmd) {
   case FORWARD:
     CLR(PORTD, 4); // LOW
