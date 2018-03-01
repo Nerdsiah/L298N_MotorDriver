@@ -11,8 +11,44 @@
 #include "WProgram.h"
 #endif
 
-#define CLR(x,y) (x&=(~(1<<y))) // direct port manipulation
-#define SET(x,y) (x|=(1<<y)) // direct port manipulation
+// uncomment to use direct port manipulation with Arduino Uno
+// will cause compiler errors if uncommented when using Arduino Due
+//#define CLR(x,y) (x&=(~(1<<y))) // direct port manipulation set pin LOW
+//#define SET(x,y) (x|=(1<<y)) // direct port manipulation set pin HIGH
+
+// use inside of .cpp file
+/*
+  example:
+  CLR(PORTC, 0); // analog pin A0 set to LOW
+  SET(PORTC, 1); // analog pin A1 set to HIGH
+*/
+
+/*
+PIO_PER  - write 1's here to override other peripherals and allow GPIO use for pins
+PIO_OER  - write 1's here to set pins as OUTPUT
+PIO_ODR  - write 1's here to set pins as INPUT
+* PIO_SODR   - write 1's here to set output pins HIGH
+* PIO_CODR   - write 1's here to set output pins LOW
+* PIO_PDSR  - read's actual state of the pins on the port.
+PIO_PUDR  - write 1's here to switch off internal pull-up for pins
+PIO_PUER  - write 1's here to switch on internal pull-up for pins
+*/
+
+// uncomment to use direct port manipulation with Arduino Due
+// will cause compiler errors if uncommented when using Arduino Uno
+#define REG_PIO[port]_OER = 0x1 << [port Pin]; // set pins to OUTPUT
+#define REG_PIO[port]_SODR = 0x1 << [Pin mask]; // Pin HIGH
+#define REG_PIO[port]_CODR = 0x1 << [port Pin]; // Pin LOW
+
+// use inside of .cpp file
+/*
+  example:
+  REG_PIOA_OER = 0x1 << 16; // analog pin A0 set to OUTPUT
+  REG_PIOA_OER = 0x1 << 24; // analog pin A1 set to OUTPUT
+  
+  REG_PIOA_SODR = 0x1 << 16; // HIGH  
+  REG_PIOA_CODR = 0x1 << 24; // LOW
+*/
 
 #define FORWARD 1
 #define BACKWARD 2
