@@ -38,41 +38,64 @@ MotorDriver::MotorDriver()
 
 void MotorDriver::run(uint8_t cmd)
 {
+  // analog pins A0-A3 used for driving motors using port manipulation on the Arduino Due
+  // all pins on the Arduino Due must set to INPUT or OUTPUT
+  // this is not required when using the Arduino Uno
+  REG_PIOA_OER = 0x1 << 16; // pin set to OUTPUT
+  REG_PIOA_OER = 0x1 << 22; // pin set to OUTPUT
+  REG_PIOA_OER = 0x1 << 23; // pin set to OUTPUT
+  REG_PIOA_OER = 0x1 << 24; // pin set to OUTPUT
+  
   switch (cmd) {
+// controls drive motor only    
   case FORWARD:
-    CLR(PORTD, 4); // LOW
-    SET(PORTD, 3); // HIGH  
+    REG_PIOA_CODR = 0x1 << 24; // LOW
+    REG_PIOA_SODR = 0x1 << 16; // HIGH  
+//    CLR(PORTD, 4); // LOW
+//    SET(PORTD, 3); // HIGH 
     analogWrite(PWMpin, _pwmVal);
     break;
   case BACKWARD:
-    SET(PORTD, 4); // HIGH
-    CLR(PORTD, 3); // LOW
+    REG_PIOA_SODR = 0x1 << 24; // HIGH
+    REG_PIOA_CODR = 0x1 << 16; // LOW
+//    SET(PORTD, 4); // HIGH
+//    CLR(PORTD, 3); // LOW
     analogWrite(PWMpin, _pwmVal);
     break;
   case BRAKE:
-    SET(PORTD, 4); // HIGH
-    SET(PORTD, 3); // HIGH
+    REG_PIOA_SODR = 0x1 << 24; // HIGH
+    REG_PIOA_SODR = 0x1 << 16; // HIGH
+//    SET(PORTD, 4); // HIGH
+//    SET(PORTD, 3); // HIGH
     analogWrite(PWMpin, _pwmVal);
     break;
   case RELEASE:
-    CLR(PORTD, 4); // LOW
-    CLR(PORTD, 3); // LOW
+    REG_PIOA_CODR = 0x1 << 24; // LOW
+    REG_PIOA_CODR = 0x1 << 16; // LOW
+//    CLR(PORTD, 4); // LOW
+//    CLR(PORTD, 3); // LOW
     analogWrite(PWMpin, _pwmVal);
     break;
+// controls steering motor only    
   case LEFT:
-    SET(PORTC, 0); // HIGH
-    CLR(PORTC, 1); // LOW
+    REG_PIOA_SODR = 0x1 << 23; // HIGH
+    REG_PIOA_CODR = 0x1 << 22; // LOW
+//    SET(PORTC, 0); // HIGH
+//    CLR(PORTC, 1); // LOW
     analogWrite(PWMpin, _pwmVal);
     break;
   case RIGHT:
-    CLR(PORTC, 0); // LOW
-    SET(PORTC, 1); // HIGH
+    REG_PIOA_CODR = 0x1 << 23; // LOW
+    REG_PIOA_SODR = 0x1 << 22; // HIGH
+//    CLR(PORTC, 0); // LOW
+//    SET(PORTC, 1); // HIGH
     analogWrite(PWMpin, _pwmVal);
     break;
   case STRAIGHT:
-    CLR(PORTC, 0); // LOW
-    CLR(PORTC, 1); // LOW
-    analogWrite(PWMpin, _pwmVal);
+    REG_PIOA_CODR = 0x1 << 23; // LOW
+    REG_PIOA_CODR = 0x1 << 22; // LOW
+//    CLR(PORTC, 0); // LOW
+//    CLR(PORTC, 1); // LOW
     break;
   }
 }
@@ -83,4 +106,3 @@ void MotorDriver::setSpeed(uint8_t pwmVal)
   return;
 }
   
-
